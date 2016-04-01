@@ -40,16 +40,16 @@ public class GUI_zakaz extends JFrame{
 	int x_size = 800; int y_size = 400;
 
 	
-	final static JLabel label_oficiant = new JLabel("Официант");
-	final static JLabel label_number_stol = new JLabel("Номер стола");
-	final static JLabel label_main_spisok_blud = new JLabel("Меню блюд");
-	final static JLabel label_bluda = new JLabel("Блюда");
+	final static JLabel label_oficiant = new JLabel("РћС„РёС†РёР°РЅС‚");
+	final static JLabel label_number_stol = new JLabel("РќРѕРјРµСЂ СЃС‚РѕР»Р°");
+	final static JLabel label_main_spisok_blud = new JLabel("РњРµРЅСЋ Р±Р»СЋРґ");
+	final static JLabel label_bluda = new JLabel("Р‘Р»СЋРґР°");
  
-	final static JLabel label_info = new JLabel("Информация о заказе:");
+	final static JLabel label_info = new JLabel("РРЅС„РѕСЂРјР°С†РёСЏ Рѕ С‚РµРєСѓС‰РµРј Р·Р°РєР°Р·Рµ:");
 	
 	final static JComboBox<String> box_oficianti = new JComboBox() {
 	
-//так поборолся с тем что комб.бокс растягивается в БоксЛейауте
+//pereopredelenie 4tobi combox ne rastagivalsa v visotu
 	        @Override
 	        public Dimension getMaximumSize() {
 	            Dimension max = super.getMaximumSize();
@@ -88,9 +88,7 @@ public class GUI_zakaz extends JFrame{
 	};
 	
 	final static Integer [] numbers ={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30};
-	
-	
-	
+		
 	final static JComboBox<Integer> box_pcs = new JComboBox(numbers){
 		 @Override
 	        public Dimension getMaximumSize() {
@@ -107,9 +105,9 @@ public class GUI_zakaz extends JFrame{
 	
 	
 	
-	final static JButton but_pay = new JButton("Оплатить заказ сейчас");
-	final static JButton but_ok = new JButton("Ок");
-	final static JButton but_cancel = new JButton("Отмена");
+	final static JButton but_pay = new JButton("РћРїР»Р°С‚РёС‚СЊ Р·Р°РєР°Р· СЃРµР№С‡Р°СЃ");
+	final static JButton but_ok = new JButton("РЎРѕР·РґР°С‚СЊ Р·Р°РєР°Р·");
+	final static JButton but_cancel = new JButton("РћС‚РјРµРЅР°");
 	{
 		but_ok.setPreferredSize(new Dimension(150,30));
 		but_cancel.setPreferredSize(new Dimension(150,30));
@@ -128,7 +126,7 @@ public class GUI_zakaz extends JFrame{
  	 
 	 String str = "";
 	 public static void addComponentsToPane(Container pane) { 
- 		 	//правая часть
+ 		 	// Right panel
 		 	rightPanel.setBorder(BorderFactory.createEmptyBorder(5,10, 65, 5));
 		 	rightPanel.setLayout(new BorderLayout());
 		 	rightPanel.add(label_info,BorderLayout.NORTH);
@@ -166,14 +164,14 @@ public class GUI_zakaz extends JFrame{
   		        leftPanel.add(Box.createRigidArea(new Dimension(0,5)));
 
   		        
-  		        //строка Лейблов названия блюд и шт-------------------------------------
+  		        // -------------------------------------
   		         
   		        leftPanel.add(label_bluda);
 		        
     		        
   		        
-  		        
-  		      //строка комбобоксов блюд+шт-------------------------------------------
+  		         //-------------------------------------------
+
   		        JPanel panel_blud = new JPanel();
   		        panel_blud.setLayout(new BoxLayout(panel_blud, BoxLayout.X_AXIS));
   		           
@@ -189,12 +187,10 @@ public class GUI_zakaz extends JFrame{
   		         
 			//---------------------------------------------------------------
 
-			//нижняя часть ------------------------------------------
+			//  ------------------------------------------
 			   
 				botomPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-				botomPanel.setLayout(new FlowLayout(1,200,2));// (1- размещение по центру,
-			 												  //  200 -расстояние между кнопками,
-			 												  //  2 - отступ по вертикали)
+				botomPanel.setLayout(new FlowLayout(1,200,2)); 
 			 	botomPanel.add(but_ok);
 			 	botomPanel.add(but_cancel);
 			 	
@@ -209,9 +205,9 @@ public class GUI_zakaz extends JFrame{
 		        centralPanel.add(leftPanel,c2);
 			 	 
 			 	c2.fill = GridBagConstraints.HORIZONTAL; 
-			    c2.weightx = 0.3; //cоотношение между компонентами - вес их по оси Х
-			    c2.gridx = 1; //размещение по Х - вторым по счету
-			    c2.gridy = 0; // по оси У - на ступени 0
+			    c2.weightx = 0.3;  
+			    c2.gridx = 1;  
+			    c2.gridy = 0;  
 		        c2.ipady= 255;
 		        centralPanel.add(rightPanel,c2);
 			
@@ -245,11 +241,10 @@ public class GUI_zakaz extends JFrame{
  
           setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
           
-         // Установить панель содержания 
+         // 
          addComponentsToPane(getContentPane()); 
   
-         // Показать окно 
-           setVisible(true); 
+            setVisible(true); 
            
            
  	}
@@ -257,7 +252,7 @@ public class GUI_zakaz extends JFrame{
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		new GUI_zakaz("Заказ");
+		new GUI_zakaz("РЎРѕР·РґР°РЅРёРµ РЅРѕРІРѕРіРѕ Р·Р°РєР°Р·Р°");
 		 	        
  	    } 
 	
