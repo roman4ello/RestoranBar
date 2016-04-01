@@ -44,10 +44,8 @@ public class GUI_zakaz extends JFrame{
 	final static JLabel label_number_stol = new JLabel("Номер стола");
 	final static JLabel label_main_spisok_blud = new JLabel("Меню блюд");
 	final static JLabel label_bluda = new JLabel("Блюда");
-	final static JLabel label_kolichestvo = new JLabel("шт");
-	final static JLabel label_vibrat = new JLabel("Выбрать");
-
-	final static JLabel label_info = new JLabel("Инфо о заказе:");
+ 
+	final static JLabel label_info = new JLabel("Информация о заказе:");
 	
 	final static JComboBox<String> box_oficianti = new JComboBox() {
 	
@@ -60,8 +58,7 @@ public class GUI_zakaz extends JFrame{
 	        }
 
 	    };
-	    
-	
+	   	
 	final static JComboBox<String> box_nomera_stolov = new JComboBox(){
 		 @Override
 	        public Dimension getMaximumSize() {
@@ -79,24 +76,9 @@ public class GUI_zakaz extends JFrame{
 	            return max;
 	        }
 	};
-	
-	final static JComboBox<String> box_bluda = new JComboBox(){
-		 @Override
-	        public Dimension getMaximumSize() {
-	            Dimension max = super.getMaximumSize();
-	            max.height = getPreferredSize().height;
-	            return max;
-	        }
-	};
-	final static JComboBox<String> box_pcs = new JComboBox(){
-		 @Override
-	        public Dimension getMaximumSize() {
-	            Dimension max = super.getMaximumSize();
-	            max.height = getPreferredSize().height;
-	            return max;
-	        }
-	};
-	final static JComboBox<String> box_boolean = new JComboBox(){
+	final static String[]  blud = {"sdsda","asdasd","asdasd"};
+
+	final static JComboBox<String> box_bluda = new JComboBox(blud){
 		 @Override
 	        public Dimension getMaximumSize() {
 	            Dimension max = super.getMaximumSize();
@@ -105,12 +87,33 @@ public class GUI_zakaz extends JFrame{
 	        }
 	};
 	
-	final static JButton but_pay = new JButton("Оплатить");
+	final static Integer [] numbers ={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30};
+	
+	
+	
+	final static JComboBox<Integer> box_pcs = new JComboBox(numbers){
+		 @Override
+	        public Dimension getMaximumSize() {
+	            Dimension max = super.getMaximumSize();
+	            max.height = getPreferredSize().height;
+	            max.width = getPreferredSize().width;
+	            return max;
+	        }
+
+	};
+	
+	
+ 	
+	
+	
+	
+	final static JButton but_pay = new JButton("Оплатить заказ сейчас");
 	final static JButton but_ok = new JButton("Ок");
 	final static JButton but_cancel = new JButton("Отмена");
 	{
 		but_ok.setPreferredSize(new Dimension(150,30));
 		but_cancel.setPreferredSize(new Dimension(150,30));
+		but_pay.setPreferredSize(new Dimension(300,40));
 	}
 	 	
 
@@ -121,15 +124,20 @@ public class GUI_zakaz extends JFrame{
 	 static JPanel rightPanel = new JPanel();
 	 static JPanel centralPanel = new JPanel();
 	 static JPanel botomPanel = new JPanel();
-	 static Font font_info =  new Font("Areal",Font.BOLD|Font.ITALIC,14);
-	 
+	 static Font font_info =  new Font("Areal",Font.BOLD,14);
+ 	 
 	 String str = "";
 	 public static void addComponentsToPane(Container pane) { 
  		 	//правая часть
-		 	rightPanel.setBorder(BorderFactory.createTitledBorder("right"));
+		 	rightPanel.setBorder(BorderFactory.createEmptyBorder(5,10, 65, 5));
 		 	rightPanel.setLayout(new BorderLayout());
 		 	rightPanel.add(label_info,BorderLayout.NORTH);
 		 	label_info.setFont(font_info);
+		 	label_bluda.setFont(font_info);
+		 	label_main_spisok_blud.setFont(font_info);
+		 	label_number_stol.setFont(font_info);
+		 	label_oficiant.setFont(font_info);
+		 	 
 		 	label_info.setHorizontalAlignment(SwingConstants.CENTER);
 			   JList  dirList = new JList(File.listRoots());
 			   dirList.setForeground(Color.black);
@@ -140,9 +148,10 @@ public class GUI_zakaz extends JFrame{
 			
 			   rightPanel.add(dirList,BorderLayout.CENTER);
 		 	//---------------------------------------------------------------
-			 
+			   	leftPanel.setBorder(BorderFactory.createEmptyBorder(0,10, 10, 40));
+
   		        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-  		        leftPanel.add(Box.createRigidArea(new Dimension(0,10)));
+  		        leftPanel.add(Box.createRigidArea(new Dimension(20,10)));
 
   		        leftPanel.add(label_oficiant);
   		        leftPanel.add(box_oficianti);
@@ -151,24 +160,38 @@ public class GUI_zakaz extends JFrame{
   		        leftPanel.add(label_number_stol);
   		        leftPanel.add(box_nomera_stolov);
   		        leftPanel.add(Box.createRigidArea(new Dimension(0,5)));
-  		  
+	  
   		        leftPanel.add(label_main_spisok_blud);
   		        leftPanel.add(box_main_bluda);
   		        leftPanel.add(Box.createRigidArea(new Dimension(0,5)));
 
-  		        JPanel panel_blud = new JPanel();
   		        
+  		        //строка Лейблов названия блюд и шт-------------------------------------
+  		         
   		        leftPanel.add(label_bluda);
-  		        leftPanel.add(box_bluda);
-  		        leftPanel.add(Box.createRigidArea(new Dimension(0,5)));
-
+		        
+    		        
+  		        
+  		        
+  		      //строка комбобоксов блюд+шт-------------------------------------------
+  		        JPanel panel_blud = new JPanel();
+  		        panel_blud.setLayout(new BoxLayout(panel_blud, BoxLayout.X_AXIS));
+  		           
+  		        panel_blud.add(box_bluda);
+  		        panel_blud.add(Box.createRigidArea(new Dimension(30,0)));
+  		        panel_blud.add(box_pcs);
+  		        
+  		        leftPanel.add(panel_blud);
+  		        leftPanel.add(Box.createRigidArea(new Dimension(0,30)));
+  		        
+  		      leftPanel.add(but_pay);
 
   		         
 			//---------------------------------------------------------------
 
 			//нижняя часть ------------------------------------------
 			   
-				botomPanel.setBorder(BorderFactory.createTitledBorder("botom"));
+				botomPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 				botomPanel.setLayout(new FlowLayout(1,200,2));// (1- размещение по центру,
 			 												  //  200 -расстояние между кнопками,
 			 												  //  2 - отступ по вертикали)
@@ -199,11 +222,18 @@ public class GUI_zakaz extends JFrame{
 			 	pane.add(botomPanel,BorderLayout.SOUTH);
 			   
 
-			 	centralPanel.setBorder(BorderFactory.createTitledBorder("central"));
+			 	centralPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 5));
 
-			
+			//------------------------------------------
+			 	
+			 	box_oficianti.setBackground(Color.WHITE);
+			 	box_pcs.setBackground(Color.WHITE);
+			 	box_main_bluda.setBackground(Color.WHITE);
+			 	box_bluda.setBackground(Color.WHITE);
+			 	box_nomera_stolov.setBackground(Color.WHITE);
 		 
-		 	
+			 	box_oficianti.setForeground(Color.BLACK);
+			 	box_bluda.setForeground(Color.BLACK);
 	    } 
 	
 	public GUI_zakaz(String title) throws HeadlessException {
