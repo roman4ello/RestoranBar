@@ -4,13 +4,13 @@ import java.util.Vector;
 
 public class Zakaz {
 	
-	int id_zakaz;// порядковый номер заказа
-	Summ suma_zakaza;// стоимость заказа
-	boolean payed_zakaz; // оплачен- неоплачен
-	Vector<Menu> vectorRegistratedZakaz = new Vector(); //список заказанных объектов Меню
-	String timeReception; //время принятия заказа
-	String timeDelivery; //время выдачи заказа
-	Staff waiter; //сотрудник(официант) который обслуживает заказ
+	int id_zakaz; 
+	Summ suma_zakaza; 
+	boolean payed_zakaz;  
+	Vector<Menu> vectorRegistratedZakaz = new Vector();  
+	String timeReception; 
+	String timeDelivery;  
+	Staff waiter;  
 	
 	public enum OrderStatus { ACCEPTED, IN_PROCESSING, ISSUED, CANCELED }
 	

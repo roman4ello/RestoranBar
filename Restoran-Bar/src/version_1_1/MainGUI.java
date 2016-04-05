@@ -30,12 +30,16 @@ public class MainGUI extends JFrame {
  
  	final public Vector<String> namesOfButtonsGorizontMenus = new Vector<String>();
 
- 	final public TreeSet<String> mainMenuBluda = new TreeSet();	 
+ 	//it is mainmenu bluda
+ 	final static public TreeSet<String> mainMenuBluda = new TreeSet();	 
 
- 	final public Map<String,Vector<Menu>> mapGruppMenuBluda = new TreeMap<>();
+ 	//it is sub menu grup restorana
+ 	final static public Map<String,Vector<Menu>> mapGruppMenuBluda = new TreeMap<>();
 
+ 	//it is Stoli menu
  	final public TreeSet<String> mainMenuStoli = new TreeSet();	 
 	
+ 	//it is submenu grup Stoli
  	final public Map<String,Vector<String>> mapGruppMenuStoli = new TreeMap<>();
 	
 	
