@@ -13,7 +13,8 @@ public class Zakaz {
 	Map<Integer,Vector<Menu>> mapMenusInZakaz = new TreeMap();  
 	String timeReception; 
 	String timeDelivery;  
-	Staff officiant;  
+	Staff officiant; 
+	Stol stol= new Stol();
 	static int counter = 0;
 	Vector<Zakaz> vectorOfZakaz = new Vector();  
 
@@ -48,18 +49,25 @@ public class Zakaz {
 	}
 
 
-
-
+	 
+String strMenuTemp="";
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-//		for (Menu elem : mapMenusInZakaz.) {
-//			elem;
-//			
-//		}//foreach
-		return "официант: "+officiant +" Заказ № " + id_zakaz + ", Сумма "+ priceZakaz +" оплачен - " + payed_zakaz +
+		if (mapMenusInZakaz.get(id_zakaz).size()>1) {
+			Vector<Menu> tempMenu = mapMenusInZakaz.get(id_zakaz);
+			
+			for (Menu menu : tempMenu) {
+				strMenuTemp =strMenuTemp +menu.toString();
+ 			}
+		}
+		else{
+			strMenuTemp=mapMenusInZakaz.get(id_zakaz).get(0).toString();
+		}
+ 		 		
+		return "официант: "+officiant +"Заказ № " + id_zakaz + ", Сумма "+ priceZakaz +" оплачен-" + payed_zakaz +"\n"+
 				
-				mapMenusInZakaz.get(id_zakaz).get(0);
+					strMenuTemp +  stol.uniqueNumberOfStol+"\n";
 		
 	}
 	

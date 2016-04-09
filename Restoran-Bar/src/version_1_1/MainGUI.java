@@ -43,7 +43,6 @@ public class MainGUI extends JFrame {
  	final public Map<String,Vector<String>> mapGruppMenuStoli = new TreeMap<>();
 	
 	
-	
 	//  --------------------------------------------------
 	 
 	final int x_screenSize = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
@@ -75,10 +74,11 @@ public class MainGUI extends JFrame {
 	public static void main(String[] args) throws ClassNotFoundException,
 			InstantiationException, IllegalAccessException,
 			UnsupportedLookAndFeelException {
+//		D:\\workspace\\git\\RestoranBar\\Restoran-Bar\\
 
-		new MainGUI("d:\\MyTeamProject\\IO\\GUI_main_menu.ini",
-					"d:\\MyTeamProject\\IO\\menu_restorana.ini",
-					"d:\\MyTeamProject\\IO\\stoli_menu.ini");
+		new MainGUI("D:\\workspace\\git\\RestoranBar\\Restoran-Bar\\IO\\GUI_main_menu.ini",
+					"D:\\workspace\\git\\RestoranBar\\Restoran-Bar\\IO\\menu_restorana.ini",
+					"D:\\workspace\\git\\RestoranBar\\Restoran-Bar\\IO\\stoli_menu.ini");
 	}
 	
 	//  namesOfButtonsGorizontMenus
@@ -146,7 +146,7 @@ public class MainGUI extends JFrame {
 			if (str.contains("#Основные позиции меню:")) {
  				
 				while(!(str= buffReader.readLine()).contains("###") ){
-					System.out.println(str);
+//					System.out.println(str);
 					if (str.contains("#КОНЕЦ_ФАЙЛА!")) 	break;
 					if (str.trim().equals(""))	continue;
 					if (str.startsWith("//"))	continue;
@@ -208,7 +208,7 @@ public class MainGUI extends JFrame {
 			if (str.contains("#Столы:")) {
  				
 				while(!(str= buffReader.readLine()).contains("###") ){
-					System.out.println(str);
+//					System.out.println(str);
 					if (str.contains("#КОНЕЦ_ФАЙЛА!")) 	break;
 					if (str.trim().equals(""))	continue;
 					if (str.startsWith("//"))	continue;
@@ -327,8 +327,8 @@ public class MainGUI extends JFrame {
 					else if (mainMenuStoli.size()>0 & elem_goriz_menu.equals("Столы") )  {
 
 						for (String elem_vertik_stoli_menu : mainMenuStoli) {
-							  System.out.println("elem_vertik_stoli_menu = "
-							  +elem_vertik_stoli_menu);
+//							  System.out.println("elem_vertik_stoli_menu = "
+//							  +elem_vertik_stoli_menu);
 
 
 							if (mapGruppMenuStoli.get(elem_vertik_stoli_menu).size() != 0) {
@@ -370,7 +370,7 @@ public class MainGUI extends JFrame {
 
 					else {
 						
-						 System.out.println("Считывание основного меню закончено");
+//						 System.out.println("Считывание основного меню закончено");
 					}// else
 
 				}// foreach

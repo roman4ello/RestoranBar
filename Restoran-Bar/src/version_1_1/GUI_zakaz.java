@@ -13,8 +13,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -62,11 +60,11 @@ public class GUI_zakaz extends JFrame {
 					"<html><center>Количество</center></html>"),
 			label_info = new JLabel("Информация о текущем заказе:");
 
-	
+//	D:\workspace\git\RestoranBar\Restoran-Bar\
 	{
 		try {
 			new Staff()
-					.doNamesOfficiantBox("d:\\MyTeamProject\\IO\\staff_officiant.ini");
+					.doNamesOfficiantBox("D:\\workspace\\git\\RestoranBar\\Restoran-Bar\\IO\\staff_officiant.ini");
 		}
 
 		catch (IOException e) {
@@ -309,12 +307,12 @@ public class GUI_zakaz extends JFrame {
 
 	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
 		// TODO Auto-generated method stub
-		new MainGUI("d:\\MyTeamProject\\IO\\GUI_main_menu.ini",
-				"d:\\MyTeamProject\\IO\\menu_restorana.ini",
-				"d:\\MyTeamProject\\IO\\stoli_menu.ini").dispose();
+		new MainGUI("D:\\workspace\\git\\RestoranBar\\Restoran-Bar\\IO\\GUI_main_menu.ini",
+				"D:\\workspace\\git\\RestoranBar\\Restoran-Bar\\IO\\menu_restorana.ini",
+				"D:\\workspace\\git\\RestoranBar\\Restoran-Bar\\IO\\stoli_menu.ini").dispose();
 		new GUI_zakaz("Окно создания нового заказа");
 
-		
+//		D:\workspace\git\RestoranBar\Restoran-Bar\
  	}
 
 	
@@ -564,6 +562,7 @@ public class GUI_zakaz extends JFrame {
 					zakaz.priceZakaz = allSummaZakaza;
  					zakaz.payed_zakaz = false;
 					zakaz.timeReception = String.valueOf(new Date().getTime());
+					zakaz.stol.uniqueNumberOfStol=(int) box_nomera_stolov.getSelectedIndex();
 					
 				} catch (NullPointerException e) {;	}
 				
@@ -573,8 +572,13 @@ public class GUI_zakaz extends JFrame {
 				for (Zakaz elem : vectorZakazov) {
 					System.out.println(elem);
 				}//foreach
-	 
-			
+				System.out.println("------------------");
+				System.out.println("vectorZakazov.size() = "+vectorZakazov.size());
+				
+				System.out.println("После всего!");
+				
+				
+				vectorMenu.removeAllElements();
 			}//создать заказ
 			
 			
