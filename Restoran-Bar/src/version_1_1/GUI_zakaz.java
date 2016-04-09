@@ -9,21 +9,32 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.Vector;
+
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
+import javax.swing.UnsupportedLookAndFeelException;
 
 public class GUI_zakaz extends JFrame {
 
@@ -33,6 +44,15 @@ public class GUI_zakaz extends JFrame {
 	int x_sizeOfGUI = 800, y_sizeOfGUI = 400;
 
 	JList dirList = new JList();
+	Vector<String> vectListContent = new Vector();
+	Vector<Zakaz> vectorZakazov = new Vector();
+	Vector<Menu> vectorMenu = new Vector();
+	static Integer allSummaZakaza = 0;
+	Map<Integer,Vector<Menu>> mapTempMenusInZakaz = new TreeMap();  
+
+	String str_offic = "";
+	String str_stol = "";
+	String str_bluda = "";
 	 
 
 	JLabel label_oficiant = new JLabel("Официант"),
@@ -115,16 +135,17 @@ public class GUI_zakaz extends JFrame {
 
 	};
 
-	JButton but_pay = new JButton("Оплатить заказ сейчас");
-	JButton but_addInOrder = new JButton("Добавить блюдо");
-	JButton but_ok = new JButton("Создать заказ");
+	JButton but_pay = new JButton("Оплатить");
+	JButton but_addBludo = new JButton("Добавить блюдо");
+	JButton but_createZakaz = new JButton("Создать заказ");
 	JButton but_cancel = new JButton("Отмена");
+	JButton but_deleteStr = new JButton("Удалить из меню");
 
 	final JPanel leftPanel = new JPanel();
 	final JPanel rightPanel = new JPanel();
 	final JPanel centralPanel = new JPanel();
 	final JPanel botomPanel = new JPanel();
-	final Font font_info = new Font("Areal", Font.BOLD, 14);
+	final Font 	font_info = new Font("Areal", Font.BOLD, 14);
 
 	String str = "";
 
@@ -147,22 +168,21 @@ public class GUI_zakaz extends JFrame {
 		label_info.setHorizontalAlignment(SwingConstants.CENTER);
 
 		dirList.setForeground(Color.black);
-		Vector<String> arrDiskContent = new Vector();
-		arrDiskContent.add("Заполните данные заказа" );
- 		dirList.setListData(arrDiskContent);
+		vectListContent.add("Заполните данные заказа" );
+ 		dirList.setListData(vectListContent);
 		dirList.setPreferredSize(new Dimension(250, 600));
 		dirList.setToolTipText("Информация о заказе");
 		
 		// Right panel
-		rightPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 125, 5));
+		rightPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 100, 5));
 		// 5 - TOP,10 -left,125-down, 5- right
 		rightPanel.setLayout(new BorderLayout(10, 10));
 		JScrollPane rightPanelScroll = new JScrollPane(dirList);
 		rightPanelScroll.setPreferredSize(new Dimension(200, 800));
 
 		rightPanel.add(label_info, BorderLayout.NORTH);
-		but_pay.setPreferredSize(new Dimension(200, 40));
-		rightPanel.add(but_pay, BorderLayout.SOUTH);
+		but_deleteStr.setPreferredSize(new Dimension(200, 40));
+		rightPanel.add(but_deleteStr, BorderLayout.SOUTH);
 		rightPanel.add(rightPanelScroll, BorderLayout.CENTER);
 		// ---------------------------------------------------------------
 		leftPanel.setLayout(null);
@@ -192,16 +212,19 @@ public class GUI_zakaz extends JFrame {
 		box_pcs.setBounds((size_x_cbox - 40), 175, 50, 20);
 		leftPanel.add(box_pcs);
 
-		but_addInOrder.setBounds(150, 215, 200, 40);
-		leftPanel.add(but_addInOrder);
+		but_addBludo.setBounds(40, 215, 200, 40);
+		leftPanel.add(but_addBludo);
  
 		// ------------------------------------------
 
 		botomPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 10));
-		botomPanel.setLayout(new FlowLayout(1, 140, 2));
-		but_ok.setPreferredSize(new Dimension(200, 40));
+		botomPanel.setLayout(new FlowLayout(1, 10, 1));
+		but_createZakaz.setPreferredSize(new Dimension(200, 40));
 		but_cancel.setPreferredSize(new Dimension(200, 40));
-		botomPanel.add(but_ok);
+		but_pay.setPreferredSize(new Dimension(200, 40));
+		botomPanel.add(but_pay);
+		botomPanel.add(Box.createRigidArea(new Dimension(62, 0)));
+		botomPanel.add(but_createZakaz);
 		botomPanel.add(but_cancel);
 
 		centralPanel.setLayout(new GridBagLayout());
@@ -233,109 +256,29 @@ public class GUI_zakaz extends JFrame {
 		centralPanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 10, 5));
 
 		// ------------------------------------------
-
+		//Цвета
 		box_oficianti.setBackground(Color.WHITE);
 		box_pcs.setBackground(Color.WHITE);
 		box_main_bluda.setBackground(Color.WHITE);
 		box_bluda.setBackground(Color.WHITE);
 		box_nomera_stolov.setBackground(Color.WHITE);
-
 		box_oficianti.setForeground(Color.BLACK);
 		box_bluda.setForeground(Color.BLACK);
 
-//		otobragenie vibora v JList
-//		arrDiskContent.clear();
 		
-		if (box_oficianti.getSelectedItem() == null) {
-			arrDiskContent.add("Выберите официанта!");
-			dirList.setListData(arrDiskContent);
-			box_nomera_stolov.setEnabled(false);
-			
-			box_main_bluda.setEnabled(false);
-			box_bluda.setEnabled(false);
-			box_pcs.setEnabled(false);
+		
+		
+//		otobragenie vibora v JList
+		vectListContent.clear();
+		box_oficianti.insertItemAt(null, 0);;
+		box_nomera_stolov.insertItemAt(null, 0);;
+		box_oficianti.setSelectedIndex(0);
+		box_nomera_stolov.setSelectedIndex(0);
+		box_nomera_stolov.setEnabled(false);
+		box_main_bluda.setEnabled(false);
+		box_bluda.setEnabled(false);
+		vectListContent.add("Выберите официанта!");
 
-		}// if
-
-		box_oficianti.addItemListener(new ItemListener() {
-
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				// TODO Auto-generated method stub
-				if (box_oficianti.getSelectedItem() != null) {
-					arrDiskContent.removeAllElements();
-					arrDiskContent.add("Официант: "
-							+ box_oficianti.getSelectedItem());
-					arrDiskContent.add("Выберите стол заказа!");
-					dirList.setListData(arrDiskContent);
-					box_nomera_stolov.setEnabled(true);
-					;
-					box_main_bluda.setEnabled(true);
-					box_bluda.setEnabled(true);
-					box_pcs.setEnabled(true);
-
-				}// if
-				else {
-					box_main_bluda.setEnabled(false);
-					box_bluda.setEnabled(false);
-					box_pcs.setEnabled(false);
-				}
-			}
-		});
-
-		box_nomera_stolov.addItemListener(new ItemListener() {
-
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				// TODO Auto-generated method stub
-				if (box_nomera_stolov.getSelectedItem() != null) {
-					arrDiskContent.remove(1);
-					// arrDiskContent.add("Официант: "+box_oficianti.getSelectedItem());
-					arrDiskContent.add("Заказ для стола: "
-							+ box_nomera_stolov.getSelectedItem());
-					dirList.removeAll();
-					
-					dirList.setListData(arrDiskContent);
-					box_main_bluda.setEnabled(true);
-					box_bluda.setEnabled(true);
-					box_pcs.setEnabled(true);
-
-				}// if
-				else {
-					box_main_bluda.setEnabled(false);
-					box_bluda.setEnabled(false);
-					box_pcs.setEnabled(false);
-				}
-			}
-		});
-
-		// box_main_bluda.addItemListener(new ItemListener() {
-		//
-		//
-		// @Override
-		// public void itemStateChanged(ItemEvent e) {
-		// // TODO Auto-generated method stub
-		// if (box_oficianti.getSelectedItem()!=null) {
-		// arrDiskContent.remove(1);
-		// // arrDiskContent.add("Официант: "+box_oficianti.getSelectedItem());
-		// arrDiskContent.add("Заказ для стола: "+box_nomera_stolov.getSelectedItem()
-		// );
-		// dirList.removeAll();;
-		// dirList.setListData(arrDiskContent);
-		// box_main_bluda.setEnabled(true);
-		// box_bluda.setEnabled(true);
-		// box_pcs.setEnabled(true);
-		//
-		//
-		// }//if
-		// }
-		// });
-		//
-
-		System.out.println("выбрано" + box_oficianti.getSelectedItem());
-
-		// box_oficianti.setSelectedIndex(0);
-		// box_nomera_stolov.setSelectedIndex(0);
 		box_main_bluda.setSelectedIndex(0);
 		box_bluda.setSelectedItem(0);
 
@@ -346,96 +289,300 @@ public class GUI_zakaz extends JFrame {
 			box_bluda.addItem(elem.nameOfElementOfMenu);
 		}// foreach
 
-		box_main_bluda.addItemListener(new ItemListener() {
-
-			@Override
-			public void itemStateChanged(ItemEvent event) {
-
-				if (event.getStateChange() == ItemEvent.SELECTED) {
-					System.out.println(" event.getItem()" + event.getItem());
-
-					Vector<Menu> secondTempGrupMenu = MainGUI.mapGruppMenuBluda
-							.get(event.getItem());
-					box_bluda.removeAllItems();
-					for (Menu elem : secondTempGrupMenu) {
-						box_bluda.addItem(elem.nameOfElementOfMenu);
-					}// foreach
-
-				}// if
-			}
-		});
-
-		box_bluda.addItemListener(new ItemListener() {
-
-			@Override
-			public void itemStateChanged(ItemEvent event) {
-				// TODO Auto-generated method stub
-				if (event.getStateChange() == ItemEvent.SELECTED) {
-					box_pcs.setSelectedIndex(0);
-				}
-
-			}
-		});
-
-		addWindowListener(new WindowListener() {
-
-			@Override
-			public void windowOpened(WindowEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void windowIconified(WindowEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void windowDeiconified(WindowEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void windowDeactivated(WindowEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void windowClosing(WindowEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void windowClosed(WindowEvent e) {
-				// TODO Auto-generated method stub
-
-//				dirList.removeAll();
-//				box_oficianti.removeAll();
-//				box_nomera_stolov.removeAll();
-//				box_main_bluda.removeAll();
-//				box_bluda.removeAll();
-//				System.out.println("Закрыто окно");
-			}
-
-			@Override
-			public void windowActivated(WindowEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
+		box_oficianti.addItemListener(new MyItemListener());
+		box_nomera_stolov.addItemListener(new MyItemListener()); 
+		box_main_bluda.addItemListener(new MyItemListener());
+		box_bluda.addItemListener(new MyItemListener());
+		
+		
+		but_addBludo.addActionListener(new MyActionListener());
+		but_cancel.addActionListener(new MyActionListener());
+		but_createZakaz.addActionListener(new MyActionListener());
+		but_pay.addActionListener(new MyActionListener());
+		but_deleteStr.addActionListener(new MyActionListener());
+				
+	
 		setVisible(true);
 
 	}
+	
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
 		// TODO Auto-generated method stub
-
+		new MainGUI("d:\\MyTeamProject\\IO\\GUI_main_menu.ini",
+				"d:\\MyTeamProject\\IO\\menu_restorana.ini",
+				"d:\\MyTeamProject\\IO\\stoli_menu.ini").dispose();
 		new GUI_zakaz("Окно создания нового заказа");
 
-	}
+		
+ 	}
 
+	
+	
+	class MyItemListener implements ItemListener{
+
+		
+		
+		@Override
+		public void itemStateChanged(ItemEvent event) {
+			// TODO Auto-generated method stub
+			
+			//если КБокс официантов
+			  if (event.getSource() == box_oficianti ) {
+				
+				if (box_oficianti.getSelectedItem() != null) {
+					str_offic = box_oficianti.getSelectedItem().toString();
+ 					vectListContent.removeAllElements();
+					vectListContent.add("Официант: "+str_offic);
+					vectListContent.add("Выберите стол заказа!");
+					dirList.removeAll();
+					dirList.setListData(vectListContent);
+					box_nomera_stolov.setEnabled(true);
+					box_main_bluda.setEnabled(false);
+					box_bluda.setEnabled(false);
+					box_pcs.setEnabled(false);
+
+				}// if
+				else if (box_oficianti.getSelectedItem() == null) {
+					vectListContent.removeAllElements();
+					vectListContent.add("Выберите официанта!");
+					dirList.removeAll();
+					dirList.setListData(vectListContent);
+					box_nomera_stolov.setEnabled(false);
+					box_main_bluda.setEnabled(false);
+					box_bluda.setEnabled(false);
+					box_pcs.setEnabled(false);
+					
+				}// if
+ 
+				
+			  }
+
+			  
+			//если КБокс номера столов
+				else if (event.getSource() == box_nomera_stolov ) {
+
+					allSummaZakaza=0;
+					vectorMenu.removeAllElements();
+
+					if (box_nomera_stolov.getSelectedItem() != null) {
+						str_stol = box_nomera_stolov.getSelectedItem().toString();
+						vectListContent.removeAllElements();
+						vectListContent.add("Официант: "+str_offic);
+						vectListContent.add(box_nomera_stolov.getSelectedItem().toString());
+						vectListContent.add("Блюда: ");
+						dirList.removeAll();
+						dirList.setListData(vectListContent);
+						box_main_bluda.setEnabled(true);
+						box_bluda.setEnabled(true);
+						box_pcs.setEnabled(true);
+						
+					}// if
+					else  if (box_nomera_stolov.getSelectedItem() == null){
+						vectListContent.removeAllElements();
+						vectListContent.add("Официант: "+str_offic);
+						vectListContent.add("Выберите стол заказа!");
+						dirList.removeAll();
+						dirList.setListData(vectListContent);
+						box_main_bluda.setEnabled(false);
+						box_bluda.setEnabled(false);
+						box_pcs.setEnabled(false);
+					}
+					
+									
+				}//if
+			  
+			//если КБокс группы блюд
+			else if (event.getSource() == box_main_bluda && (event.getStateChange() == ItemEvent.SELECTED)) {
+				Vector<Menu> secondTempGrupMenu = MainGUI.mapGruppMenuBluda.get(event.getItem());
+				box_bluda.removeAllItems();
+				for (Menu elem : secondTempGrupMenu) {
+					box_bluda.addItem(elem.nameOfElementOfMenu);
+				}// foreach
+				
+			}//if
+
+			//если КБокс блюда
+			else if (event.getSource() == box_bluda && (event.getStateChange() == ItemEvent.SELECTED)) {
+				 box_pcs.setSelectedIndex(1);
+ 							
+			}//if
+			
+			
+		}//itemStateChanged
+		
+	}//class MyItemListener
+	
+	
+	class MyActionListener implements ActionListener {
+
+ 
+		@Override
+		public void actionPerformed(ActionEvent event) {
+
+			
+			//Добавить блюдо
+			if (event.getSource() == but_addBludo) {
+
+				if (box_pcs.getSelectedIndex()==0){
+					JOptionPane.showMessageDialog
+					(null, "Сколько порций  "+box_bluda.getSelectedItem()+" ?", "Внимание!",JOptionPane.QUESTION_MESSAGE);
+					
+				}//if
+				else{
+					
+				Integer tempCost = 0;  	
+				Integer tempWeight = 0;	
+				Vector<Menu> tempBludo = MainGUI.mapGruppMenuBluda.get(box_main_bluda.getSelectedItem());
+				for (Menu elem : tempBludo) {
+					if (elem.nameOfElementOfMenu==box_bluda.getSelectedItem()) {
+						tempCost = elem.costOfElementOfMenu;
+						tempWeight = elem.weightOfElementOfMenu;
+						break;
+					}//if
+				}//foreach
+				
+				
+		 				
+				vectListContent.add(box_bluda.getSelectedItem()+ " - "+ box_pcs.getSelectedItem() +" шт, " +tempCost*
+						(int)box_pcs.getSelectedItem()+ " гривен");
+
+				
+				
+				//заполнение вектора меню
+				//когда выбрано несколько порций блюда
+					if ((int)box_pcs.getSelectedItem()>1) {
+					
+						for (int i = 0; i < (int)box_pcs.getSelectedItem(); i++) {
+							vectorMenu.add(new Menu(box_bluda.getSelectedItem().toString(),tempCost , tempWeight));
+						}//for
+					}//if
+					
+					//когда выбрана одна порция блюда
+					else{ vectorMenu.add(new Menu(box_bluda.getSelectedItem().toString(),tempCost , tempWeight));}
+					
+					//убираем лишний раз написанную Сумму заказа
+					for (int i = 0; i < vectListContent.size(); i++) {
+						if (vectListContent.get(i).startsWith("Сумма заказа")){
+							vectListContent.remove(i);
+						}
+ 					}//for
+					
+					//добавляем сумму заказа в конец списка отображения
+					
+//					allSummaZakaza;
+					int tempSumma=0;
+					for (Menu elem : vectorMenu) {
+						tempSumma = tempSumma + elem.costOfElementOfMenu;
+					}//foreach
+					allSummaZakaza = tempSumma;
+
+					vectListContent.add("Сумма заказа ВСЕГО: " +allSummaZakaza + " гривен");
+					dirList.removeAll();				
+					dirList.setListData(vectListContent);
+					System.out.println("allSummaZakaza"+allSummaZakaza);
+ 
+				}
+				
+ 				
+				
+				for (String elem : vectListContent) {
+//					elem.charAt(index)
+					
+				}//foreach
+								
+
+			 	Map<String,Vector<Menu>> tempMapAllBluda = MainGUI.mapGruppMenuBluda;
+			 	
+			 	List<String> listBludsOfZakaz = new ArrayList();
+			 	
+			 	
+			}//if			
+			
+			
+			//отмена
+			else if (event.getSource()==but_cancel) {
+				dispose();
+			}
+			
+			
+			//УДАЛИТЬ ИЗ МЕНЮ
+			else if (event.getSource()==but_deleteStr) {
+   					
+				//если удаляются несколько элементов сразу
+				if (dirList.getSelectedValuesList().size()>1) {
+					
+					List<String> temp = dirList.getSelectedValuesList();
+					
+					for (String elem : temp) {
+						
+		 				vectListContent.remove(elem);
+					}//foreach
+					
+				}//if
+				
+				//если удаляется только один элемент строки
+				else {
+					String str = dirList.getSelectedValue().toString();
+					str = str.substring(str.indexOf("шт,")+3, str.indexOf(" гривен")).trim().replace(" ",	"");
+					 System.out.println("вот оно = "+"|"+str+"|");
+ 					 int temp_Suma = allSummaZakaza -Integer.valueOf(str);
+					allSummaZakaza = temp_Suma;
+					System.out.println("allSummaZakaza при удалении = "+ allSummaZakaza);
+					str = dirList.getSelectedValue().toString();
+					str = str.substring(0, str.indexOf("-")).trim();
+					
+					for (int i = 0; i < vectorMenu.size(); i++) {
+ 						if (vectorMenu.get(i).nameOfElementOfMenu.equals(str)){
+							System.out.println("равны");
+							vectorMenu.remove(i);
+							break;
+						}
+					}//for
+					
+					vectListContent.remove(dirList.getSelectedValue());
+					vectListContent.remove(vectListContent.size()-1);
+					vectListContent.add("Сумма заказа ВСЕГО: " + allSummaZakaza + " гривен");
+
+				}//else
+				
+ 				dirList.setListData(vectListContent);
+ 				dirList.repaint();
+				dirList.revalidate();
+
+ 			}
+
+			
+			//Создать заказ
+			else if (event.getSource()==but_createZakaz) {
+				Zakaz zakaz =  new Zakaz(vectorMenu);
+ 
+				
+				try { 
+					
+					zakaz.officiant = Staff.vectorStaff.get(box_oficianti.getSelectedIndex()-1);
+					zakaz.priceZakaz = allSummaZakaza;
+ 					zakaz.payed_zakaz = false;
+					zakaz.timeReception = String.valueOf(new Date().getTime());
+					
+				} catch (NullPointerException e) {;	}
+				
+				vectorZakazov.addElement(zakaz);
+//				mapTempMenusInZakaz.put(zakaz.id_zakaz, value)
+				System.out.println("Вектор заказов-----");
+				for (Zakaz elem : vectorZakazov) {
+					System.out.println(elem);
+				}//foreach
+	 
+			
+			}//создать заказ
+			
+			
+		}//actionPerformed
+		
+	}//MyActionListener
+	
+	
+	
+	
 }// public class

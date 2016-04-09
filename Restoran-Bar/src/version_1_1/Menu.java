@@ -12,6 +12,9 @@ public class Menu {
 	Integer costOfElementOfMenu; 	// стоимость
 	Integer weightOfElementOfMenu; 	// вес
 	static int count_uniq = 0; //  счетчик
+	Summ suma  = new Summ();  //// стоимость
+	
+	
 	
 	//Меп меню
 	//Ключ - одно из названий группы меню, Value = подменю этой группы 
@@ -25,7 +28,7 @@ public class Menu {
 		this.nameOfElementOfMenu = nameOfElementOfMenu;
 		this.costOfElementOfMenu = costOfElementOfMenu;
 		this.weightOfElementOfMenu = weightOfElementOfMenu;
-		this.uniqueIdOfElementOfMenu = +count_uniq;
+//		this.uniqueIdOfElementOfMenu = +count_uniq;
 
 	}
 	
@@ -38,5 +41,18 @@ public class Menu {
 
 		
 	}//main
+
+
+
+
+
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "имя блюда: "+nameOfElementOfMenu +", цена: "+ costOfElementOfMenu +", вес: " + weightOfElementOfMenu ;
+	}
+	
+	
+	
 
 }//public class
