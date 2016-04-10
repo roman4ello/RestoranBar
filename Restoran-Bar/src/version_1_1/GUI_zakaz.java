@@ -577,7 +577,8 @@ public class GUI_zakaz extends JFrame {
 				
 				System.out.println("После всего!");
 				
-				
+				System.out.println("После всего!");
+
 				vectorMenu.removeAllElements();
 			}//создать заказ
 			
