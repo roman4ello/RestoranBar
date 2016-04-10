@@ -21,6 +21,8 @@ public class CopyZakaz {
 	public enum OrderStatus { ACCEPTED, IN_PROCESSING, ISSUED, CANCELED }
 	
 	
+	
+	
 		
 	
 	
