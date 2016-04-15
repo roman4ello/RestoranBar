@@ -306,7 +306,7 @@ public class GUI_zakaz extends JFrame {
 		componentsAddItemListener();
 		componentsAddActionListener();
 		setVisible(true);
-
+		System.out.println("asdfsadfa");
 	}
 	
 
