@@ -68,7 +68,7 @@ String strMenuTemp="";
  		 		
 		return "официант: "+officiant +"Заказ № " + id_zakaz + ", Сумма "+ priceZakaz +" оплачен-" + payed_zakaz +"\n"+
 				
-					strMenuTemp +  stol.uniqueNumberOfStol+"\n";
+					strMenuTemp +  "Стол номер: "+stol.uniqueNumberOfStol+"\n";
 		
 	}
 	

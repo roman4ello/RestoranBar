@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.Vector;
 
@@ -36,21 +38,20 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 public class GUI_zakaz extends JFrame {
 
-	int x_screenSize = (int) Toolkit.getDefaultToolkit().getScreenSize()
-			.getWidth(), y_screenSize = (int) Toolkit.getDefaultToolkit()
-			.getScreenSize().getHeight();
+	int x_screenSize = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth(), 
+		y_screenSize = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 	int x_sizeOfGUI = 800, y_sizeOfGUI = 400;
 
-	JList dirList = new JList();
-	Vector<String> vectListContent = new Vector();
+	JList dirList = new JList();//комипонета ЛИСТ, для отображения в окне ГУИ
+	Vector<String> vectListContent = new Vector();//для запоминание строк которые надо вывести в ЛИСТ
 	Vector<Zakaz> vectorZakazov = new Vector();
 	Vector<Menu> vectorMenu = new Vector();
 	static Integer allSummaZakaza = 0;
-	Map<Integer,Vector<Menu>> mapTempMenusInZakaz = new TreeMap();  
+	static Map<Integer,Vector<Zakaz>> mapZakazov = new TreeMap();  
 
-	String str_offic = "";
-	String str_stol = "";
-	String str_bluda = "";
+	String 	str_offic = "",
+			str_stol = "",
+			str_bluda = "";
 	 
 
 	JLabel label_oficiant = new JLabel("Официант"),
@@ -306,7 +307,7 @@ public class GUI_zakaz extends JFrame {
 		componentsAddItemListener();
 		componentsAddActionListener();
 		setVisible(true);
-		System.out.println("asdfsadfa");
+
 	}
 	
 
@@ -317,8 +318,10 @@ public class GUI_zakaz extends JFrame {
 				"D:\\workspace\\git\\RestoranBar\\Restoran-Bar\\IO\\stoli_menu.ini").dispose();
 		new GUI_zakaz("Окно создания нового заказа");
 
-//		D:\workspace\git\RestoranBar\Restoran-Bar\
- 	}
+		
+		            
+		
+  	}
 
 	
 	
@@ -415,8 +418,7 @@ public class GUI_zakaz extends JFrame {
 		}//itemStateChanged
 		
 	}//class MyItemListener
-	
-	
+		
 	class MyActionListener implements ActionListener {
 
  
@@ -427,16 +429,17 @@ public class GUI_zakaz extends JFrame {
 			//НАЖАТА КНОПКА ДОБАВИТЬ БЛЮДО
 			if (event.getSource() == but_addBludo) {
 
-				if (box_pcs.getSelectedIndex()==0){
+			if (box_pcs.getSelectedIndex()==0){
 					JOptionPane.showMessageDialog
 					(null, "Сколько порций  "+box_bluda.getSelectedItem()+" ?", "Внимание!",JOptionPane.QUESTION_MESSAGE);
 					
 				}//if
-				else{
+			else{
 					
 				Integer tempCost = 0;  	
 				Integer tempWeight = 0;	
 				Vector<Menu> tempBludo = MainGUI.mapGruppMenuBluda.get(box_main_bluda.getSelectedItem());
+		
 				for (Menu elem : tempBludo) {
 					if (elem.nameOfElementOfMenu==box_bluda.getSelectedItem()) {
 						tempCost = elem.costOfElementOfMenu;
@@ -485,19 +488,7 @@ public class GUI_zakaz extends JFrame {
  
 				}
 				
- 				
-				
-				for (String elem : vectListContent) {
-//					elem.charAt(index)
-					
-				}//foreach
-								
-
-			 	Map<String,Vector<Menu>> tempMapAllBluda = MainGUI.mapGruppMenuBluda;
-			 	
-			 	List<String> listBludsOfZakaz = new ArrayList();
-			 	
-			 	
+ 				 
 			}//if			
 			
 			
@@ -556,8 +547,8 @@ public class GUI_zakaz extends JFrame {
 			
 			//НАЖАТА КНОПКА СОЗДАТЬ ЗАКАЗ
 			else if (event.getSource()== but_createZakaz) {
-				System.out.println("vectorMenu.size() ="+vectorMenu.size());
-				Zakaz zakaz =  new Zakaz(vectorMenu);
+				
+ 				Zakaz zakaz =  new Zakaz(vectorMenu);
  				
 				try { 
 					zakaz.officiant = Staff.vectorStaff.get(box_oficianti.getSelectedIndex()-1);
@@ -566,23 +557,25 @@ public class GUI_zakaz extends JFrame {
 					zakaz.timeReception = String.valueOf(new Date().getTime());
 					zakaz.stol.uniqueNumberOfStol=(int) box_nomera_stolov.getSelectedIndex();
 					
-				} catch (NullPointerException e) {;	}
- 				vectorZakazov.addElement(zakaz);
-//				mapTempMenusInZakaz.put(zakaz.id_zakaz, value)
-				System.out.println("Вектор заказов-----");
+				} catch (NullPointerException e) {
+					JOptionPane.showMessageDialog
+					(null, "Что то не то в создаваемом заказе", "Внимание!", JOptionPane.ERROR_MESSAGE);	
+					}
 				
+ 				vectorZakazov.addElement(zakaz);
+ 				
+ 				System.out.println("При создании заказа: "+zakaz.id_zakaz);
 				for (Zakaz elem : vectorZakazov) {
 					System.out.println(elem);
 				}//foreach
-				System.out.println("------------------");
-				System.out.println("vectorZakazov.size() = "+vectorZakazov.size());
-				
-				System.out.println("После всего!");
-				
-				System.out.println("После всего!");
+				 mapZakazov.put(zakaz.id_zakaz, vectorZakazov);
+ 				vectorMenu.removeAllElements();
+ 				vectorZakazov.removeAllElements();
 
-				vectorMenu.removeAllElements();
-			}//создать заказ
+ 				 
+  					
+  					
+  			}//создать заказ
 			
 			
 		}//actionPerformed
