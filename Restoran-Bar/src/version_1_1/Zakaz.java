@@ -54,6 +54,7 @@ String strMenuTemp="";
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
+		
 		if (mapMenusInZakaz.get(id_zakaz).size()>1) {
 			Vector<Menu> tempMenu = mapMenusInZakaz.get(id_zakaz);
 			
