@@ -13,8 +13,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -62,11 +60,10 @@ public class GUI_zakaz extends JFrame {
 					"<html><center>Количество</center></html>"),
 			label_info = new JLabel("Информация о текущем заказе:");
 
-	
-	{
+ 	{
 		try {
 			new Staff()
-					.doNamesOfficiantBox("d:\\MyTeamProject\\IO\\staff_officiant.ini");
+					.doNamesOfficiantBox("D:\\workspace\\git\\RestoranBar\\Restoran-Bar\\IO\\staff_officiant.ini");
 		}
 
 		catch (IOException e) {
@@ -151,8 +148,7 @@ public class GUI_zakaz extends JFrame {
 
 	final int size_x_cbox = 350, size_y_cbox = 20;
 
-	public GUI_zakaz(String title) throws HeadlessException {
-		super(title);
+	public void decorateGUI(){
 		setSize(x_sizeOfGUI, y_sizeOfGUI);
 		setLocation((x_screenSize - x_sizeOfGUI) / 2,
 				(y_screenSize - y_sizeOfGUI) / 2);
@@ -264,10 +260,23 @@ public class GUI_zakaz extends JFrame {
 		box_nomera_stolov.setBackground(Color.WHITE);
 		box_oficianti.setForeground(Color.BLACK);
 		box_bluda.setForeground(Color.BLACK);
+	}
+	public void componentsAddActionListener(){
 
-		
-		
-		
+		but_addBludo.addActionListener(new MyActionListener());
+		but_cancel.addActionListener(new MyActionListener());
+		but_createZakaz.addActionListener(new MyActionListener());
+		but_pay.addActionListener(new MyActionListener());
+		but_deleteStr.addActionListener(new MyActionListener());
+	}
+	public void componentsAddItemListener(){
+		box_oficianti.addItemListener(new MyItemListener());
+		box_nomera_stolov.addItemListener(new MyItemListener()); 
+		box_main_bluda.addItemListener(new MyItemListener());
+		box_bluda.addItemListener(new MyItemListener());
+	}
+	
+	public void defaultFeautersGUIcomponents(){
 //		otobragenie vibora v JList
 		vectListContent.clear();
 		box_oficianti.insertItemAt(null, 0);;
@@ -288,20 +297,14 @@ public class GUI_zakaz extends JFrame {
 		for (Menu elem : firstTempGrupMenu) {
 			box_bluda.addItem(elem.nameOfElementOfMenu);
 		}// foreach
-
-		box_oficianti.addItemListener(new MyItemListener());
-		box_nomera_stolov.addItemListener(new MyItemListener()); 
-		box_main_bluda.addItemListener(new MyItemListener());
-		box_bluda.addItemListener(new MyItemListener());
+	}
+	public GUI_zakaz(String title) throws HeadlessException {
+		super(title);
 		
-		
-		but_addBludo.addActionListener(new MyActionListener());
-		but_cancel.addActionListener(new MyActionListener());
-		but_createZakaz.addActionListener(new MyActionListener());
-		but_pay.addActionListener(new MyActionListener());
-		but_deleteStr.addActionListener(new MyActionListener());
-				
-	
+		decorateGUI();
+		defaultFeautersGUIcomponents();
+		componentsAddItemListener();
+		componentsAddActionListener();
 		setVisible(true);
 
 	}
@@ -309,12 +312,12 @@ public class GUI_zakaz extends JFrame {
 
 	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
 		// TODO Auto-generated method stub
-		new MainGUI("d:\\MyTeamProject\\IO\\GUI_main_menu.ini",
-				"d:\\MyTeamProject\\IO\\menu_restorana.ini",
-				"d:\\MyTeamProject\\IO\\stoli_menu.ini").dispose();
+		new MainGUI("D:\\workspace\\git\\RestoranBar\\Restoran-Bar\\IO\\GUI_main_menu.ini",
+				"D:\\workspace\\git\\RestoranBar\\Restoran-Bar\\IO\\menu_restorana.ini",
+				"D:\\workspace\\git\\RestoranBar\\Restoran-Bar\\IO\\stoli_menu.ini").dispose();
 		new GUI_zakaz("Окно создания нового заказа");
 
-		
+//		D:\workspace\git\RestoranBar\Restoran-Bar\
  	}
 
 	
@@ -421,7 +424,7 @@ public class GUI_zakaz extends JFrame {
 		public void actionPerformed(ActionEvent event) {
 
 			
-			//Добавить блюдо
+			//НАЖАТА КНОПКА ДОБАВИТЬ БЛЮДО
 			if (event.getSource() == but_addBludo) {
 
 				if (box_pcs.getSelectedIndex()==0){
@@ -447,8 +450,7 @@ public class GUI_zakaz extends JFrame {
 				vectListContent.add(box_bluda.getSelectedItem()+ " - "+ box_pcs.getSelectedItem() +" шт, " +tempCost*
 						(int)box_pcs.getSelectedItem()+ " гривен");
 
-				
-				
+								
 				//заполнение вектора меню
 				//когда выбрано несколько порций блюда
 					if ((int)box_pcs.getSelectedItem()>1) {
@@ -470,8 +472,7 @@ public class GUI_zakaz extends JFrame {
 					
 					//добавляем сумму заказа в конец списка отображения
 					
-//					allSummaZakaza;
-					int tempSumma=0;
+ 					int tempSumma=0;
 					for (Menu elem : vectorMenu) {
 						tempSumma = tempSumma + elem.costOfElementOfMenu;
 					}//foreach
@@ -500,13 +501,13 @@ public class GUI_zakaz extends JFrame {
 			}//if			
 			
 			
-			//отмена
+			//НАЖАТА КНОПКА ОТМЕНА
 			else if (event.getSource()==but_cancel) {
 				dispose();
 			}
 			
 			
-			//УДАЛИТЬ ИЗ МЕНЮ
+			//НАЖАТА КНОПКА УДАЛИТЬ ИЗ МЕНЮ
 			else if (event.getSource()==but_deleteStr) {
    					
 				//если удаляются несколько элементов сразу
@@ -553,28 +554,34 @@ public class GUI_zakaz extends JFrame {
  			}
 
 			
-			//Создать заказ
-			else if (event.getSource()==but_createZakaz) {
+			//НАЖАТА КНОПКА СОЗДАТЬ ЗАКАЗ
+			else if (event.getSource()== but_createZakaz) {
+				System.out.println("vectorMenu.size() ="+vectorMenu.size());
 				Zakaz zakaz =  new Zakaz(vectorMenu);
- 
-				
+ 				
 				try { 
-					
 					zakaz.officiant = Staff.vectorStaff.get(box_oficianti.getSelectedIndex()-1);
 					zakaz.priceZakaz = allSummaZakaza;
  					zakaz.payed_zakaz = false;
 					zakaz.timeReception = String.valueOf(new Date().getTime());
+					zakaz.stol.uniqueNumberOfStol=(int) box_nomera_stolov.getSelectedIndex();
 					
 				} catch (NullPointerException e) {;	}
-				
-				vectorZakazov.addElement(zakaz);
+ 				vectorZakazov.addElement(zakaz);
 //				mapTempMenusInZakaz.put(zakaz.id_zakaz, value)
 				System.out.println("Вектор заказов-----");
+				
 				for (Zakaz elem : vectorZakazov) {
 					System.out.println(elem);
 				}//foreach
-	 
-			
+				System.out.println("------------------");
+				System.out.println("vectorZakazov.size() = "+vectorZakazov.size());
+				
+				System.out.println("После всего!");
+				
+				System.out.println("После всего!");
+
+				vectorMenu.removeAllElements();
 			}//создать заказ
 			
 			

@@ -49,7 +49,7 @@ public class Menu {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return "имя блюда: "+nameOfElementOfMenu +", цена: "+ costOfElementOfMenu +", вес: " + weightOfElementOfMenu ;
+		return "Блюдо: "+nameOfElementOfMenu +", цена: "+ costOfElementOfMenu +", вес: " + weightOfElementOfMenu+"\n" ;
 	}
 	
 	

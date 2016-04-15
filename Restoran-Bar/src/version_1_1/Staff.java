@@ -82,7 +82,7 @@ System.out.println(temp);
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return "ФИО:"+ surName + " "+ name + " " + secondName +" Уник.ID " + uniqueIdStaff + " ";
+		return  "ФИО:"+ surName + " "+ name + " " + secondName +" Уник.ID " + uniqueIdStaff + "\n";
 	}
 
 	

@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
 
-public class Zakaz {
+public class CopyZakaz {
 	
 	int id_zakaz; 
 	Summ suma_zakaza; 
@@ -16,15 +16,17 @@ public class Zakaz {
 	Staff officiant; 
 	Stol stol= new Stol();
 	static int counter = 0;
-	Vector<Zakaz> vectorOfZakaz = new Vector();  
+	Vector<CopyZakaz> vectorOfZakaz = new Vector();  
 
 	public enum OrderStatus { ACCEPTED, IN_PROCESSING, ISSUED, CANCELED }
+	
+	
 	
 	
 		
 	
 	
-	public Zakaz(Vector<Menu> allMenusInZakazPar) {
+	public CopyZakaz(Vector<Menu> allMenusInZakazPar) {
 		super();
 		this.id_zakaz = ++counter;
 		this.priceZakaz = priceZakaz;
@@ -35,7 +37,7 @@ public class Zakaz {
 		this.officiant = officiant;
 		this.vectorOfZakaz = vectorOfZakaz;
 	}
-	public Zakaz() {
+	public CopyZakaz() {
 		super();
 		 
 	}
@@ -54,7 +56,6 @@ String strMenuTemp="";
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		
 		if (mapMenusInZakaz.get(id_zakaz).size()>1) {
 			Vector<Menu> tempMenu = mapMenusInZakaz.get(id_zakaz);
 			

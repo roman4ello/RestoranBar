@@ -55,12 +55,6 @@ public class Stol {
 	}
 
 
-
-
-
-
-
-
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		makesStoliInfo();
@@ -72,4 +66,20 @@ public class Stol {
 		}//foreach
 	}//main
 
+	
+	@Override
+	public String toString() {
+
+		
+		return   "Номер стола: "+ uniqueNumberOfStol + "макс кол-во персон стола: "  + personSizeOfStol+
+				"свободен сейчас: "+ freeInCurTimeStol + "Резерв: " + reserved+
+				"Время резервирования:"+ timeReserve;	 
+ 			 
+				
+	}
+
+	
+	
+	
+	
 }//class
